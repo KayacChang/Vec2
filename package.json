@@ -1,0 +1,7 @@
+{
+  "name": "vec2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "kayac <egg734631@gmail.com>",
+  "license": "MIT"
+}
