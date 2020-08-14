@@ -97,6 +97,19 @@ export function isVec3(o: any): o is IVec3 {
   return isAVec3(o) && isOVec3(o);
 }
 
+/**
+ * create Vec3 instance
+ *
+ *  ### Examples:
+ *     new Victor(45, 45, 45);
+ *     Victor(45, 45, 45);
+ *     Victor([45, 45, 45]);
+ *     Victor({ x: 45, y: 45, z: 45});
+ *
+ * @param x x value of the x axis
+ * @param y y value of the y axis
+ * @param z z value of the z axis
+ */
 export function Vec3(x: number, y: number, z: number): IVec3;
 export function Vec3(arr: OVec3 | AVec3): IVec3;
 export function Vec3(...args: any): IVec3 {
@@ -110,18 +123,25 @@ export function Vec3(...args: any): IVec3 {
     return vec3_from(x, y, z);
   }
 
-  if (
-    args.length === 3 &&
-    isNumber(args[0]) &&
-    isNumber(args[1]) &&
-    isNumber(args[2])
-  ) {
+  if (args.length === 3 && args.slice(0, 3).every(isNumber)) {
     return vec3_from(args[0], args[1], args[2]);
   }
 
   throw new Error(`Invalid argument type`);
 }
 
+/**
+ * create Vec2 instance
+ *
+ *  ### Examples:
+ *     new Victor(45, 45);
+ *     Victor(45, 45);
+ *     Victor([45, 45]);
+ *     Victor({ x: 45, y: 45});
+ *
+ * @param x x value of the x axis
+ * @param y y value of the y axis
+ */
 export function Vec2(x: number, y: number): IVec2;
 export function Vec2(obj: OVec2 | AVec2): IVec2;
 export function Vec2(...args: any): IVec2 {
@@ -135,7 +155,7 @@ export function Vec2(...args: any): IVec2 {
     return vec2_from(x, y);
   }
 
-  if (args.length === 2 && isNumber(args[0]) && isNumber(args[1])) {
+  if (args.length === 2 && args.slice(0, 2).every(isNumber)) {
     return vec2_from(args[0], args[1]);
   }
 
