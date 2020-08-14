@@ -60,7 +60,7 @@ function vec3_from(x: number, y: number, z: number) {
 }
 
 function isNumber(o: any): o is number {
-  return !Number.isNaN(o);
+  return typeof o == "number";
 }
 
 function isNumberArray(o: any): o is number[] {
