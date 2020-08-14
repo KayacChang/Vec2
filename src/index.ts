@@ -57,9 +57,16 @@ function isNumberArray(o: any): o is number[] {
 export function Vec3(x: number, y: number, z: number): IVec3;
 export function Vec3(arr: [number, number, number]): IVec3;
 export function Vec3(...args: any): IVec3 {
-  if (args.length === 1 && isNumberArray(args[0]) && args[0].length === 3) {
-    const [x, y, z] = args[0];
-    return vec3_from(x, y, z);
+  if (args.length === 1) {
+    if (isNumberArray(args[0]) && args[0].length === 3) {
+      const [x, y, z] = args[0];
+      return vec3_from(x, y, z);
+    }
+
+    if ("x" in args[0] && "y" in args[0] && "z" in args[0]) {
+      const { x, y, z } = args[0];
+      return vec3_from(x, y, z);
+    }
   }
 
   if (
@@ -75,11 +82,19 @@ export function Vec3(...args: any): IVec3 {
 }
 
 export function Vec2(x: number, y: number): IVec2;
+export function Vec2(obj: { x: number; y: number }): IVec2;
 export function Vec2(arr: [number, number]): IVec2;
 export function Vec2(...args: any): IVec2 {
-  if (args.length === 1 && isNumberArray(args[0]) && args[0].length === 2) {
-    const [x, y] = args[0];
-    return vec2_from(x, y);
+  if (args.length === 1) {
+    if (isNumberArray(args[0]) && args[0].length === 2) {
+      const [x, y] = args[0];
+      return vec2_from(x, y);
+    }
+
+    if ("x" in args[0] && "y" in args[0]) {
+      const { x, y } = args[0];
+      return vec2_from(x, y);
+    }
   }
 
   if (args.length === 2 && isNumber(args[0]) && isNumber(args[1])) {
