@@ -60,7 +60,7 @@ function vec3_from(x: number, y: number, z: number) {
 }
 
 function isNumber(o: any): o is number {
-  return typeof o == "number";
+  return Number.isFinite(o);
 }
 
 function isNumberArray(o: any): o is number[] {
