@@ -1,4 +1,7 @@
-export interface IVec2 extends Array<Number> {
+export type Vec2 = AVec2 | IVec2 | OVec2;
+export type Vec3 = AVec3 | IVec3 | OVec3;
+
+export interface IVec2 extends Array<number> {
   [0]: number;
   [1]: number;
   x: number;
@@ -98,21 +101,22 @@ export function isVec3(o: any): o is IVec3 {
 }
 
 /**
- * create Vec3 instance
+ * create IVec3 instance, default (0, 0, 0)
  *
  *  ### Examples:
- *     new Victor(45, 45, 45);
- *     Victor(45, 45, 45);
- *     Victor([45, 45, 45]);
- *     Victor({ x: 45, y: 45, z: 45});
+ *     new vec3(45, 45, 45);
+ *     vec3(45, 45, 45);
+ *     vec3([45, 45, 45]);
+ *     vec3({ x: 45, y: 45, z: 45});
+ *     vec3(vec3(45, 45, 45));
  *
  * @param x x value of the x axis
  * @param y y value of the y axis
  * @param z z value of the z axis
  */
-export function Vec3(x: number, y: number, z: number): IVec3;
-export function Vec3(arr: OVec3 | AVec3): IVec3;
-export function Vec3(...args: any): IVec3 {
+export function vec3(x: number, y: number, z: number): IVec3;
+export function vec3(arr: Vec3): IVec3;
+export function vec3(...args: any): IVec3 {
   if (args.length === 1 && isAVec3(args[0])) {
     const [x, y, z] = args[0];
     return vec3_from(x, y, z);
@@ -127,24 +131,29 @@ export function Vec3(...args: any): IVec3 {
     return vec3_from(args[0], args[1], args[2]);
   }
 
+  if (args.length === 0) {
+    return vec3_from(0, 0, 0);
+  }
+
   throw new Error(`Invalid argument type`);
 }
 
 /**
- * create Vec2 instance
+ * create IVec2 instance, default (0, 0)
  *
  *  ### Examples:
- *     new Victor(45, 45);
- *     Victor(45, 45);
- *     Victor([45, 45]);
- *     Victor({ x: 45, y: 45});
+ *     new vec2(45, 45);
+ *     vec2(45, 45);
+ *     vec2([45, 45]);
+ *     vec2({ x: 45, y: 45});
+ *     vec2(vec2(45, 45));
  *
  * @param x x value of the x axis
  * @param y y value of the y axis
  */
-export function Vec2(x: number, y: number): IVec2;
-export function Vec2(obj: OVec2 | AVec2): IVec2;
-export function Vec2(...args: any): IVec2 {
+export function vec2(x: number, y: number): IVec2;
+export function vec2(obj: Vec2): IVec2;
+export function vec2(...args: any): IVec2 {
   if (args.length === 1 && isAVec2(args[0])) {
     const [x, y] = args[0];
     return vec2_from(x, y);
@@ -159,82 +168,89 @@ export function Vec2(...args: any): IVec2 {
     return vec2_from(args[0], args[1]);
   }
 
+  if (args.length === 0) {
+    return vec2_from(0, 0);
+  }
+
   throw new Error(`Invalid argument type`);
 }
 
-export function add([a1, a2]: IVec2 | AVec2, [b1, b2]: IVec2 | AVec2): IVec2 {
-  return Vec2([a1 + b1, a2 + b2]);
+export function add(a: Vec2, b: Vec2): IVec2 {
+  const [a1, a2] = vec2(a);
+  const [b1, b2] = vec2(b);
+  return vec2([a1 + b1, a2 + b2]);
 }
 
-export function sub([a1, a2]: IVec2 | AVec2, [b1, b2]: IVec2 | AVec2): IVec2 {
-  return Vec2([a1 - b1, a2 - b2]);
+export function sub(a: Vec2, b: Vec2): IVec2 {
+  const [a1, a2] = vec2(a);
+  const [b1, b2] = vec2(b);
+  return vec2([a1 - b1, a2 - b2]);
 }
 
-export function mul(a: AVec2 | IVec2, b: number): IVec2;
-export function mul(a: AVec2 | IVec2, b: AVec2 | IVec2): IVec2;
-export function mul(a: AVec2 | IVec2, b: any): IVec2 {
+export function mul(a: Vec2, b: number): IVec2;
+export function mul(a: Vec2, b: Vec2): IVec2;
+export function mul(a: Vec2, b: any): IVec2 {
   if (isNumber(b)) {
-    const [a1, a2] = a;
-    return Vec2([a1 * b, a2 * b]);
+    const [a1, a2] = vec2(a);
+    return vec2([a1 * b, a2 * b]);
   }
 
-  const [a1, a2] = a;
-  const [b1, b2] = b;
-  return Vec2([a1 * b1, a2 * b2]);
+  const [a1, a2] = vec2(a);
+  const [b1, b2] = vec2(b);
+  return vec2([a1 * b1, a2 * b2]);
 }
 
-export function div([x, y]: IVec2 | AVec2, s: number): IVec2 {
-  return Vec2([x / s, y / s]);
+export function div(v: Vec2, s: number): IVec2 {
+  const [x, y] = vec2(v);
+  return vec2([x / s, y / s]);
 }
 
-export function mag([x, y]: IVec2 | AVec2): number {
+export function mag(v: Vec2): number {
+  const [x, y] = vec2(v);
   return Math.sqrt(x * x + y * y);
 }
 
-export function dot(a: AVec2 | IVec2, b: AVec2 | IVec2): number {
-  const [a1, a2] = a;
-  const [b1, b2] = b;
-
+export function dot(a: Vec2, b: Vec2): number {
+  const [a1, a2] = vec2(a);
+  const [b1, b2] = vec2(b);
   return a1 * b1 + a2 * b2;
 }
 
-export function det([a, b]: [AVec2 | IVec2, IVec2 | AVec2]): number {
-  const [a1, a2] = a;
-  const [b1, b2] = b;
+export function det([a, b]: [Vec2, Vec2]): number {
+  const [a1, a2] = vec2(a);
+  const [b1, b2] = vec2(b);
   return a1 * b2 - a2 * b1;
 }
 
-export function cross(
-  [a1, a2, a3]: IVec3 | AVec3,
-  [b1, b2, b3]: IVec3 | AVec3
-): IVec3 {
+export function cross(a: Vec3, b: Vec3): IVec3 {
+  const [a1, a2, a3] = vec3(a);
+  const [b1, b2, b3] = vec3(b);
   // prettier-ignore
-  return Vec3([
+  return vec3([
     a2 * b3 - a3 * b2,
     a3 * b1 - a1 * b3,
     a1 * b2 - a2 * b1,
   ]);
 }
 
-export function rotate(v: IVec2 | AVec2, radian: number): IVec2 {
+export function rotate(v: Vec2, radian: number): IVec2 {
   const { cos, sin } = Math;
-  return Vec2([
-    dot(v, Vec2([cos(radian), -1 * sin(radian)])),
-    dot(v, Vec2([sin(radian), cos(radian)])),
+  return vec2([
+    dot(v, vec2([cos(radian), -1 * sin(radian)])),
+    dot(v, vec2([sin(radian), cos(radian)])),
   ]);
 }
 
-export function normal(v: IVec2 | AVec2): IVec2 {
+export function normal(v: Vec2): IVec2 {
   const { max } = Math;
   return div(v, max(1, mag(v)));
 }
 
-export function lerp(a: AVec2 | IVec2, b: AVec2 | IVec2, t: number): IVec2 {
-  const [a1, a2] = a;
-  const [b1, b2] = b;
-
+export function lerp(a: Vec2, b: Vec2, t: number): IVec2 {
+  const [a1, a2] = vec2(a);
+  const [b1, b2] = vec2(b);
   // prettier-ignore
-  return Vec2([
+  return vec2([
     _lerp(a1, b1, t),
     _lerp(a2, b2, t),
   ]);
