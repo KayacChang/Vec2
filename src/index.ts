@@ -233,6 +233,11 @@ export function cross(a: Vec3, b: Vec3): IVec3 {
   ]);
 }
 
+export function dir(radius: number): IVec2 {
+  const { cos, sin } = Math;
+  return vec2([sin(radius), cos(radius)]);
+}
+
 export function rotate(v: Vec2, radian: number): IVec2 {
   const { cos, sin } = Math;
   return vec2([
